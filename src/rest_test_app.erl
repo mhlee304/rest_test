@@ -21,7 +21,7 @@ start(_Type, _Args) ->
     {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
         env => #{dispatch => Dispatch}
     }),
-    rest_hello_world_sup:start_link().
+    rest_test_sup:start_link().
 
 stop(_State) ->
     ok = cowboy:stop_listener(http).
