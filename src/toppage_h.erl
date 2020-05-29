@@ -11,35 +11,35 @@
 
 -export([init/2]).
 -export([content_types_provided/2]).
--export([hello_to_html/2]).
--export([hello_to_json/2]).
--export([hello_to_text/2]).
+-export([start_registration/2]).
+-export([end_registration/2]).
+-export([start_authentication/2]).
+-export([end_authentication/2]).
+
 
 init(Req, Opts) ->
   {cowboy_rest, Req, Opts}.
 
 content_types_provided(Req, State) ->
   {[
-    {<<"text/html">>, hello_to_html},
-    {<<"application/json">>, hello_to_json},
-    {<<"text/plain">>, hello_to_text}
+    {<<"start_registration/json">>, start_registration},
+    {<<"end_registration/json">>, end_registration},
+    {<<"start_authentication/json">>, start_authentication},
+    {<<"end_authentication/json">>, end_authentication}
   ], Req, State}.
 
-hello_to_html(Req, State) ->
-  Body = <<"<html>
-<head>
-	<meta charset=\"utf-8\">
-	<title>REST Hello World!</title>
-</head>
-<body>
-	<p>REST Hello World as HTML!</p>
-</body>
-</html>">>,
+start_registration(Req, State) ->
+  Body = <<"{\"rest\": \"I think the Registration Started!\"}">>,
   {Body, Req, State}.
 
-hello_to_json(Req, State) ->
-  Body = <<"{\"rest\": \"Hello World!\"}">>,
+end_registration(Req, State) ->
+  Body = <<"{\"rest\": \"I think the Registration Ended!\"}">>,
   {Body, Req, State}.
 
-hello_to_text(Req, State) ->
-  {<<"REST Hello World as text!">>, Req, State}.
+start_authentication(Req, State) ->
+  Body = <<"{\"rest\": \"I think the Authentication Started!\"}">>,
+  {Body, Req, State}.
+
+end_authentication(Req, State) ->
+  Body = <<"{\"rest\": \"I think the Authentication Ended!\"}">>,
+  {Body, Req, State}.
