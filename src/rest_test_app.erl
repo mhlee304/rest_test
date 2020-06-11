@@ -21,7 +21,8 @@ start(_Type, _Args) ->
             {"/start_registration", start_registration, []},
             {"/finish_registration", finish_registration, []},
             {"/start_login", start_login, []},
-            {"/finish_login", finish_login, []}
+            {"/finish_login", finish_login, []},
+            {"/json_handler", json_handler, []}
 
 
         ]}

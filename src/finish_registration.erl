@@ -29,5 +29,5 @@ fetch_response(Call) ->
 
 init(Req, Opts) ->
   io:format("Fetched string associated with Matt"),
-  fetch_response("Matthew"),
-  {ok, Req , Opts}.
+  Body = fetch_response("Matthew"),
+  {ok, Body, Req, Opts}.
