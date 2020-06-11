@@ -41,17 +41,18 @@ content_types_accepted(Req, State) ->
   ], Req, State}.
 
 post_json(Req, State) ->
-  %{true, Req, State}.
-  {ok, ReqBody, Req2} = cowboy_req:body(Req),
-  Req_Body_decoded = jsx:decode(ReqBody),
-  [{<<"call">>,Call},{<<"response">>,Response}] = Req_Body_decoded,
-  Call1 = binary_to_list(Call),
-  Response1 = binary_to_list(Response),
-  io:format("Call1 is ~p ~n ", [Call1]),
-  io:format("Response1 is ~p ~n", [Response1]),
+  {ok, ReqBody, Req2} = cowboy_req:read_body(Req),
+  Req_Body_decoded = jsx:decode(ReqBody, [return_maps]),
+  Call_Binary = maps:get(<<"call">>, Req_Body_decoded),
+  Response_Binary = maps:get(<<"response">>, Req_Body_decoded),
+  Call = binary_to_list(Call_Binary),
+  Response = binary_to_list(Response_Binary),
   io:format("Call is ~p ~n", [Call]),
   io:format("Response is ~p ~n", [Response]),
- Res1 = cowboy_req:set_resp_body(ReqBody, Req2),
- Res2 = cowboy_req:delete_resp_header(<<"content-type">>, Res1),
- Res3 = cowboy_req:set_resp_header(<<"content-type">>, <<"application/json">>, Res2),
-  {true, Res3, State}.
+  io:format("Call Binary is ~p~n~n", [Call_Binary]),
+  io:format("Response Binary is ~p~n~n", [Response_Binary]),
+  io:format("ReqBody is ~p~n~n", [ReqBody]),
+  io:format("Req2 is ~p~n~n", [Req2]),
+  io:format("Response is ~p~n~n", [Req_Body_decoded]),
+  {true, Req, State}.
+
