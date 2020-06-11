@@ -49,8 +49,6 @@ post_json(Req, State) ->
   Response = binary_to_list(Response_Binary),
   io:format("Call is ~p ~n", [Call]),
   io:format("Response is ~p ~n", [Response]),
-  io:format("Call Binary is ~p~n~n", [Call_Binary]),
-  io:format("Response Binary is ~p~n~n", [Response_Binary]),
   io:format("ReqBody is ~p~n~n", [ReqBody]),
   io:format("Req2 is ~p~n~n", [Req2]),
   io:format("Response is ~p~n~n", [Req_Body_decoded]),
