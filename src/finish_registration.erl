@@ -9,9 +9,27 @@
 -module(finish_registration).
 -author("matthewlee").
 -behaviour(gen_event).
--export([init/2, fetch_response/1]).
+-export([init/2, fetch_response/1, allowed_methods/2, content_types_provided/2, get_json/2, go/1]).
 -record(project, {call,
   response}).
+
+
+
+allowed_methods(Req, State) ->
+  {[<<"GET">>, <<"POST">>], Req, State}.
+init(Req, Opts) ->
+  {cowboy_rest, Req, Opts}.
+
+
+%Get
+content_types_provided(Req, State) ->
+  {[
+    {<<"get/json">>, get_json}
+  ], Req, State}.
+
+get_json(Req, State) ->
+  {<<"{ \"hello\": \"there\" }">>, Req, State}.
+
 
 %%Finds response associated with call
 fetch_response(Call) ->
@@ -26,8 +44,14 @@ fetch_response(Call) ->
       end,
   mnesia:activity(transaction, F).
 
+project_to_json_encodable(#project{call = Call, response = Response}) ->
+  [{call, list_to_binary(Call)}, {response, list_to_binary(Response)}].
 
-init(Req, Opts) ->
-  io:format("Fetched string associated with Matt"),
-  Body = fetch_response("Matthew"),
-  {ok, Body, Req, Opts}.
+go(Call) ->
+  A = mnesia:dirty_read({project, Call}),
+  [{_, _, X}] = A,
+  Project = [
+    #project{call = Call, response = X}
+  ],
+  JSON = jsx:encode(lists:map(fun project_to_json_encodable/1, Project)),
+  io:format("~s~n", [JSON]).

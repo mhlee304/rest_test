@@ -31,7 +31,8 @@ content_types_provided(Req, State) ->
   ], Req, State}.
 
 get_json(Req, State) ->
-  {<<"{ \"hello\": \"there\" }">>, Req, State}.
+  {<<"{ \"hello\": \"there\" }">>,
+    Req, State}.
 
 
 %Post

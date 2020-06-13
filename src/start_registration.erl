@@ -52,12 +52,5 @@ add_username(Call, Response) ->
   mnesia:activity(transaction, F).
 
 init(Req, Opts) ->
-
   {cowboy_rest, Req, Opts}.
-
-  %io:format("The start registration started and added username Matthew"),
-  %{ok, Req, Opts}.
-
-
-
 
