@@ -13,8 +13,6 @@
 -record(project, {call,
   response}).
 
-
-
 allowed_methods(Req, State) ->
   {[<<"GET">>, <<"POST">>], Req, State}.
 init(Req, Opts) ->
@@ -28,7 +26,8 @@ content_types_provided(Req, State) ->
   ], Req, State}.
 
 get_json(Req, State) ->
-  {<<"{ \"hello\": \"there\" }">>, Req, State}.
+  Body = go("Matthew"),
+  {Body, Req, State}.
 
 
 %%Finds response associated with call
@@ -44,9 +43,11 @@ fetch_response(Call) ->
       end,
   mnesia:activity(transaction, F).
 
+%erlang to json
 project_to_json_encodable(#project{call = Call, response = Response}) ->
   [{call, list_to_binary(Call)}, {response, list_to_binary(Response)}].
 
+%fetches response and converts it to json
 go(Call) ->
   A = mnesia:dirty_read({project, Call}),
   [{_, _, X}] = A,
@@ -54,4 +55,4 @@ go(Call) ->
     #project{call = Call, response = X}
   ],
   JSON = jsx:encode(lists:map(fun project_to_json_encodable/1, Project)),
-  io:format("~s~n", [JSON]).
+  JSON.
