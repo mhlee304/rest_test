@@ -5,9 +5,8 @@
 
 -module(rest_test_app).
 -behaviour(application).
--record(project, {call,
-    response}).
-
+-record(project, {user_id,
+    username, u2f_enroll, u2f_device}).
 %% API.
 -export([start/2, install/0] ).
 -export([stop/1]).
@@ -22,6 +21,7 @@ start(_Type, _Args) ->
             {"/finish_registration", finish_registration, []},
             {"/start_login", start_login, []},
             {"/finish_login", finish_login, []},
+            {"/enroll", enroll, []},
             {"/json_handler", json_handler, []}
 
 

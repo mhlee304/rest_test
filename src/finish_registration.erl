@@ -16,8 +16,27 @@
 allowed_methods(Req, State) ->
   {[<<"GET">>, <<"POST">>], Req, State}.
 init(Req, Opts) ->
-  {cowboy_rest, Req, Opts}.
+  Method = cowboy_req:method(Req),
+  #{echo := Echo} = cowboy_req:match_qs([{echo, [], undefined}], Req),
+  Req1 = echo(Method, Echo, Req),
+  {cowboy_rest, Req1, Opts}.
 
+
+echo(<<"GET">>, undefined, Req) ->
+  cowboy_req:reply(400, #{}, <<"Missing echo parameter.">>, Req);
+echo(<<"GET">>, Echo, Req) ->
+  %%change erlang term to string to pass into go
+  R= io_lib:format("~p",[Echo]),
+  J = lists:flatten(R),
+  O = lists:sublist(J, 4, length(J) - 6),
+  E = go(O),
+  io:format("Echo is ~p ~n", [O]),
+  cowboy_req:reply(200, #{
+    <<"content-type">> => <<"text/plain; charset=utf-8">>
+  }, E, Req);
+echo(_, _, Req) ->
+  %% Method not allowed.
+  cowboy_req:reply(405, Req).
 
 %Get
 content_types_provided(Req, State) ->
