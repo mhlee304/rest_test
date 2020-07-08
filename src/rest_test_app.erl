@@ -5,8 +5,8 @@
 
 -module(rest_test_app).
 -behaviour(application).
--record(project, {user_id,
-    username, u2f_enroll, u2f_device}).
+-record(project, {
+    username, u2f_enroll = [], u2f_device}).
 %% API.
 -export([start/2, install/0] ).
 -export([stop/1]).
