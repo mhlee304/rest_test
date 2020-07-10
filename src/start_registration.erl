@@ -45,9 +45,9 @@ echo(Req) ->
     <<"content-type">> => <<"text/plain; charset=utf-8">>
   },  <<"Hello world!">>, Req).
 
+
 content_types_accepted(Req, State) ->
   {[
-    {<<"text/html">>, post_json},
     {<<"application/json">>, post_json}
   ], Req, State}.
 
