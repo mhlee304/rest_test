@@ -6,7 +6,7 @@
 -module(rest_test_app).
 -behaviour(application).
 -record(project, {
-    username, u2f_enroll = [], u2f_device}).
+    username, app_id, u2f_device, challenge}).
 %% API.
 -export([start/2, install/0] ).
 -export([stop/1]).
