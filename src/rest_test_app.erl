@@ -18,13 +18,8 @@ start(_Type, _Args) ->
         {'_', [
             {"/", toppage_h, []},
             {"/start_registration", start_registration, []},
-            {"/finish_registration", finish_registration, []},
-            {"/start_login", start_login, []},
-            {"/finish_login", finish_login, []},
-            {"/enroll", enroll, []},
-            {"/json_handler", json_handler, []}
-
-
+            {"/finish_registration", finish_registration, []}
+            
         ]}
     ]),
     {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
