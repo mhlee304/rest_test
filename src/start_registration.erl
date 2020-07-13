@@ -49,10 +49,16 @@ post_json(Req, State) ->
   User_Data_Json = convert_to_json(Username),
   case cowboy_req:method(Req2) of
     <<"POST">> ->
-      {{true, User_Data_Json}, Req2, State};
+      Req3 = cowboy_req:reply(200,
+        #{<<"content-type">> => <<"application/json">>},
+        User_Data_Json,
+        Req2),
+      {stop, Req3, State};
     _ ->
       {true, Req2, State}
   end.
+
+
 
 
 %check if user is in table, if yes -> return true;
