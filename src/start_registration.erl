@@ -15,7 +15,7 @@
   allowed_methods/2,
   content_types_accepted/2, post_json/2, is_username_in_table/1,
   add_user_skeleton/1, convert_to_json/1,
-  hello_to_json/2, echo/1, handle/2
+  hello_to_json/2
 
 ]).
 
@@ -26,25 +26,6 @@
 %has to contain cowboy_rest
 init(Req, Opts) ->
   {cowboy_rest, Req, Opts}.
-
-handle(Req, State) ->
-  {Method, Req2} = cowboy_req:method(Req),
-  case Method of
-    <<"POST">> ->
-      Body = <<"<h1>This is a response for POST</h1>">>;
-    <<"GET">> ->
-      Body = <<"<h1>This is a response for GET</h1>">>;
-    _ ->
-      Body = <<"<h1>This is a response for other methods</h1>">>
-  end,
-  {ok, Req3} = cowboy_req:reply(200, [], Body, Req2),
-  {ok, Req3, State}.
-
-echo(Req) ->
-  cowboy_req:reply(200, #{
-    <<"content-type">> => <<"text/plain; charset=utf-8">>
-  },  <<"Hello world!">>, Req).
-
 
 content_types_accepted(Req, State) ->
   {[
@@ -66,18 +47,12 @@ post_json(Req, State) ->
   is_username_in_table(Username),
   create_challenge(Username),
   User_Data_Json = convert_to_json(Username),
-  io:format("Username is ~p ~n", [Username]),
-  io:format("ReqBody is ~p~n~n", [ReqBody]),
-  io:format("Req2 is ~p~n~n", [Req2]),
-  io:format("Response is ~p~n~n", [Req_Body_decoded]),
-  io:format("User Data in Json is ~p~n~n", [User_Data_Json]),
   case cowboy_req:method(Req2) of
     <<"POST">> ->
       {{true, User_Data_Json}, Req2, State};
     _ ->
       {true, Req2, State}
   end.
-
 
 
 %check if user is in table, if yes -> return true;
